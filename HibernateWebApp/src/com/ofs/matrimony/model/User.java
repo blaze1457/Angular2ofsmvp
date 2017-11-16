@@ -1,4 +1,4 @@
-package com.jwt.hibernate.bean;
+package com.ofs.matrimony.model;
 
 public class User {
 	private String user_Id;

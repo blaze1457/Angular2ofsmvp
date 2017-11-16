@@ -1,4 +1,4 @@
-package com.jwt.hibernate.dao;
+package com.ofs.matrimony.dao;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-import com.jwt.hibernate.bean.User;
+import com.ofs.matrimony.model.User;
 
 public class UserDAO {
 

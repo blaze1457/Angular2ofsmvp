@@ -1,4 +1,4 @@
-package com.jwt.hibernate.controller;
+package com.ofs.matrimony.controller;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.jwt.hibernate.dao.UserDAO;
+import com.ofs.matrimony.dao.UserDAO;
 
 public class UserControllerServlet extends HttpServlet {
 	
@@ -37,6 +37,8 @@ public class UserControllerServlet extends HttpServlet {
 		String phoneno = request.getParameter("phoneno");
 		String city = request.getParameter("city");
 
+		System.out.println(emailid);
+		
 		HttpSession session = request.getSession(true);
 		try {
 			UserDAO userDAO = new UserDAO();

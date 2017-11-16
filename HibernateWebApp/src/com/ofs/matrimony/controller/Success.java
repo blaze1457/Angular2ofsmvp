@@ -1,4 +1,4 @@
-package com.jwt.hibernate.controller;
+package com.ofs.matrimony.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
