@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.jwt.hibernate.bean.User" table="Matrimony_Profile_Info">
+		<id column="User_Id" name="user_Id" type="java.lang.String" />
+		<property column="USER_NAME" name="userName" type="java.lang.String" />
+		<property column="PASSWORD" name="Password" type="string" />
+		<property column="DOB" name="Dob" type="java.lang.string" />
+		<property column="Pob" name="Pob" type="java.lang.string" />
+		<property column="motherlang" name="motherlang" type="java.lang.string" />
+		<property column="caste" name="caste" type="java.lang.string" />
+		<property column="gender" name="gender" type="java.lang.string" />
+		<property column="education" name="education" type="java.lang.string" />
+		<property column="occupation" name="occupation" type="java.lang.string" />
+		<property column="annualincome" name="annualincome" type="java.lang.Integer" />
+		<property column="state" name="state" type="java.lang.string" />
+		<property column="phoneno" name="phoneno" type="java.lang.Integer" />
+		<property column="status" name="status" type="java.lang.string" />
+		<property column="religion" name="religion" type="java.lang.string" />
+		<property column="country" name="country" type="java.lang.string" />
+		<property column="residentstatus" name="residentstatus" type="java.lang.string" />
+		<property column="citizenship" name="citizenship" type="java.lang.string" />
+		<property column="employement" name="employement" type="java.lang.string" />
+		<property column="EMAIL" name="emailid" type="java.lang.String" />
+		<property column="CITY" name="city" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

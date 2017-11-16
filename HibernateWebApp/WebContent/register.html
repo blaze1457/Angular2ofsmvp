@@ -1,0 +1,299 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+     <title>Matrimony</title>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" ></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
+    <script >
+    //defining module
+    var myapp = angular.module('myapp', []);
+     
+    //creating custom directive
+    myapp.directive('ngCompare', function () {
+     return {
+     require: 'ngModel',
+     link: function (scope, currentEl, attrs, ctrl) {
+     var comparefield = document.getElementsByName(attrs.ngCompare)[0]; //getting first element
+     compareEl = angular.element(comparefield);
+     
+     //current field key up
+     currentEl.on('keyup', function () {
+     if (compareEl.val() != "") {
+     var isMatch = currentEl.val() === compareEl.val();
+     ctrl.$setValidity('compare', isMatch);
+     scope.$digest();
+     }
+     });
+     
+     //Element to compare field key up
+     compareEl.on('keyup', function () {
+     if (currentEl.val() != "") {
+     var isMatch = currentEl.val() === compareEl.val();
+     ctrl.$setValidity('compare', isMatch);
+     scope.$digest();
+     }
+     });
+     }
+     }
+    });
+     
+    // create angular controller
+    myapp.controller('mainController', function ($scope) {
+    	
+    	 $scope.mothlangList = [
+    		 { mothlanId: 1, Name: 'Tamil' },
+    		 { mothlanId: 2, Name: 'English' },
+    		 { mothlanId: 3, Name: 'Hindi' },
+    		 { mothlanId: 4, Name: 'Urdu' },
+    		 { mothlanId: 5, Name: 'Kannada' },
+    		 { mothlanId: 6, Name: 'Malayalam' },
+    		 { mothlanId: 7, Name: 'Oriya' },
+    		 { mothlanId: 8, Name: 'Marathi' },
+    		 { mothlanId: 9, Name: 'Bengali' },
+    		 { mothlanId: 10, Name: 'Assamese' },
+    		 { mothlanId: 11, Name: 'Rajasthani' },
+    		 { mothlanId: 12, Name: 'Manipuri' },
+    		 { mothlanId: 13, Name: 'Others' },
+    		 ];
+    	 
+
+    	 $scope.educationList = [
+    		 { eduId: 1, Name: 'Any' },
+    		 { eduId: 2, Name: 'Bachelors-Engineering-Computers' },
+    		 { eduId: 3, Name: 'Masters-Engineering-Computers' },
+    		 { eduId: 4, Name: 'Bachelors-Arts-Science-Commerce-Others' },
+    		 { eduId: 5, Name: 'Masters-Arts-Science-Commerce-Others' },
+    		 { eduId: 6, Name: 'Management-BBA-MBA-Others' },
+    		 { eduId: 7, Name: 'Medicine-General-Dental-Surgeon-Others' },
+    		 { eduId: 8, Name: 'Legal-BL-ML-LLB-LLM-Others' },
+    		 { eduId: 9, Name: 'Service-IAS-IPS-Others' },
+    		 { eduId: 10, Name: 'Ph-Diploma' },
+    		 { eduId: 11, Name: 'Higher-Secondary-Secondary' },
+    		 ];
+    	 
+    	 $scope.religionList = [
+    		 { religionId: 1, Name: 'Hindu' },
+    		 { religionId: 2, Name: 'Christian' },
+    		 { religionId: 3, Name: 'Muslim' },
+    		 { religionId: 4, Name: 'Sikh' },
+    		 { religionId: 5, Name: 'Jain' },
+    		 { religionId: 6, Name: 'Parsi' },
+    		 { religionId: 7, Name: 'Buddhist' },
+    		 { religionId: 8, Name: 'InterReligion' },
+    		 { religionId: 9, Name: 'NoReligion' },
+    		 ];
+    	 
+    	 $scope.employementList = [
+    		 { employId: 1, Name: 'Government' },
+    		 { employId: 2, Name: 'Private' },
+    		 { employId: 3, Name: 'Business' },
+    		 { employId: 4, Name: 'Defence' },
+    		 { employId: 5, Name: 'Not-Working' },
+    		 ];
+    	 
+    	 $scope.residencyList = [
+    		 { residId: 1, Name: 'Government' },
+    		 { residId: 2, Name: 'Private' },
+    		 { residId: 3, Name: 'Business' },
+    		 { residId: 4, Name: 'Defence' },
+    		 { residId: 5, Name: 'Not-Working' },
+    		 ];
+     
+     // function to submit the form after all validation has occurred 
+     $scope.submitForm = function () {
+     
+     // Set the 'submitted' flag to true
+     $scope.submitted = true;
+     
+     if ($scope.userForm.$valid) {
+     alert("Form is valid!");
+     }
+     else {
+     alert("Please correct errors!");
+     }
+     };
+    });
+     
+    </script>
+    </head>
+    <body ng-app="myapp" ng-controller="mainController">
+     <div class="container">
+     <div class="col-sm-8 col-sm-offset-2">
+     
+     <!-- PAGE HEADER -->
+     <div class="page-header"><h1>AngularJS Form Validation</h1></div>
+     
+     <!-- FORM : YOU CAN DISABLE, HTML5 VALIDATION BY USING "novalidate" ATTRIBUTE-->
+     <form name="userForm" ng-submit="submitForm()" novalidate>
+     
+     <!-- NAME -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Name</label>
+     <input type="text" name="name" class="form-control" ng-model="Name" placeholder="Your Name" ng-required="true">
+     <p ng-show="userForm.name.$error.required && (userForm.name.$dirty || submitted)" class="help-block">You name is required.</p>
+     </div>
+     
+     <!-- USERNAME -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
+     <label>Username</label>
+     <input type="text" name="username" class="form-control" ng-model="user_Id" placeholder="Your Username" ng-minlength="3" ng-maxlength="8" ng-required="true">
+     <p ng-show="userForm.username.$error.required && (userForm.username.$dirty || submitted)" class="help-block">You username is required.</p>
+     <p ng-show="userForm.username.$error.minlength && (userForm.username.$dirty || submitted)" class="help-block">Username is too short.</p>
+     <p ng-show="userForm.username.$error.maxlength && (userForm.username.$dirty || submitted)" class="help-block">Username is too long.</p>
+     </div>
+     
+     <!-- GENDER -->
+     <div class="form-group">
+	 <label id="label" >Gender:</label>&nbsp;&nbsp;&nbsp;
+	 Male&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" ng-model="gender" value="male" required>
+	 &nbsp;&nbsp;&nbsp;&nbsp Female <input type="radio" name="gender" ng-model="gender" value="female" required></br>
+	 <span class="msg" ng-show="frm.gender.$error.required">select any gender</span>
+	 </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.motherlang.$invalid && (userForm.motherlang.$dirty || submitted)}">
+     <label>Mother Langugae</label>
+     <select name="motherlang" class="form-control"
+ 		ng-model="motherlang"
+ 		ng-options="mothlang.mothlanId as mothlang.Name for mothlang in mothlangList"
+ 		ng-required="true">
+ 		<option value=''>Select</option>
+ 	 </select>
+     <p ng-show="userForm.motherlang.$error.required && (userForm.motherlang.$dirty || submitted)" class="help-block">You Mother Language is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Caste</label>
+     <input type="text" name="caste" class="form-control" ng-model="caste" placeholder="Your Caste" ng-required="true">
+     <p ng-show="userForm.caste.$error.required && (userForm.caste.$dirty || submitted)" class="help-block">You Caste is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Education</label>
+ 	 <select name="education" class="form-control"
+ 		ng-model="education"
+ 		ng-options="education.eduId as education.Name for education in educationList"
+ 		ng-required="true">
+ 		<option value=''>Select</option>
+ 	 </select>     <p ng-show="userForm.education.$error.required && (userForm.education.$dirty || submitted)" class="help-block">Select Education.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Occupation</label>
+     <input type="text" name="occupation" class="form-control" ng-model="occupation" placeholder="Your occupation" ng-required="true">
+     <p ng-show="userForm.occupation.$error.required && (userForm.occupation.$dirty || submitted)" class="help-block">Occupation is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Annual Income</label>
+     <input type="text" name="annualincome" class="form-control" ng-model="annualincome" placeholder="Your annualincome" ng-required="true">
+     <p ng-show="userForm.annualincome.$error.required && (userForm.annualincome.$dirty || submitted)" class="help-block">Annual Income is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>State</label>
+     <input type="text" name="state" class="form-control" ng-model="state" placeholder="Your state" ng-required="true">
+     <p ng-show="userForm.state.$error.required && (userForm.state.$dirty || submitted)" class="help-block">State is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Status</label>
+     <input type="text" name="status" class="form-control" ng-model="status" placeholder="Your status" ng-required="true">
+     <p ng-show="userForm.status.$error.required && (userForm.status.$dirty || submitted)" class="help-block">Status is Required</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Religion</label>
+     <select name="religion" class="form-control"
+ 		ng-model="religion"
+ 		ng-options="religion.religionId as religion.Name for religion in religionList"
+ 		ng-required="true">
+ 		<option value=''>Select</option>     
+ 		<p ng-show="userForm.religion.$error.required && (userForm.religion.$dirty || submitted)" class="help-block">Religion is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Resident Status</label>
+     <select name="residentstatus" class="form-control"
+ 		ng-model="residentstatus"
+ 		ng-options="residentstatus.residId as residentstatus.Name for residentstatus in residencyList"
+ 		ng-required="true">
+ 		<option value=''>Select</option>      <p ng-show="userForm.residentstatus.$error.required && (userForm.residentstatus.$dirty || submitted)" class="help-block">Resident Status is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Citizenship</label>
+     <input type="text" name="citizenship" class="form-control" ng-model="citizenship" placeholder="Your Citizenship" ng-required="true">
+     <p ng-show="userForm.citizenship.$error.required && (userForm.citizenship.$dirty || submitted)" class="help-block">You name is required.</p>
+     </div>
+     
+     <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+     <label>Employement Type</label>
+	 <select name="employement" class="form-control"
+ 		ng-model="employement"
+ 		ng-options="employement.employId as employement.Name for employement in employementList"
+ 		ng-required="true">
+ 		<option value=''>Select</option>     
+ 		<p ng-show="userForm.employement.$error.required && (userForm.employement.$dirty || submitted)" class="help-block">Employment is required.</p>
+     </div>
+     
+     <!-- PASSWORD -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && (userForm.password.$dirty || submitted)}">
+     <label>Password</label>
+     <input type="Password" name="password" class="form-control" ng-model="Password" placeholder="Your Password" ng-required="true">
+     <p ng-show="userForm.password.$error.required && (userForm.password.$dirty || submitted)" class="help-block">Your password is required.</p>
+     </div>
+     
+     <!-- CONFIRM PASSWORD -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.confirmPassword.$invalid && (userForm.confirmPassword.$dirty || submitted)}">
+     <label>Confirm Password</label>
+     <input type="Password" name="confirmPassword" class="form-control" ng-model="confirmPassword" placeholder="Confirm Your Password" ng-compare="password" ng-required="true">
+     <p ng-show="userForm.confirmPassword.$error.required && (userForm.confirmPassword.$dirty || submitted)" class="help-block">Your confirm password is required.</p>
+     <p ng-show="userForm.confirmPassword.$error.compare && (userForm.confirmPassword.$dirty || submitted)" class="help-block">Confirm password doesnot match.</p>
+     </div>
+     
+     <!-- EMAIL -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$dirty || submitted)}">
+     <label>Email</label>
+     <input type="email" name="email" class="form-control" ng-model="emailid" placeholder="Your Email Address" ng-required="true">
+     <p ng-show="userForm.email.$error.required && (userForm.email.$dirty || submitted)" class="help-block">Email is required.</p>
+     <p ng-show="userForm.email.$error.email && (userForm.email.$dirty || submitted)" class="help-block">Enter a valid email.</p>
+     </div>
+     
+     <!-- CONTACTNO -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.contactno.$invalid && (userForm.contactno.$dirty || submitted) }">
+     <label>ContactNo</label>
+     <input type="text" name="contactno" class="form-control" ng-model="phoneno" placeholder="Your Contact No" ng-pattern="/^[789]\d{9}$/" maxlength="10">
+     <p ng-show="userForm.contactno.$error.pattern && (userForm.contactno.$dirty || submitted)" class="help-block">Enter a valid contactno.</p>
+     </div>
+     
+     <!-- COUNTRY -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.country.$invalid && (userForm.country.$dirty || submitted)}">
+     <label>Country</label>
+     <input type="text" name="country" class="form-control" ng-model="country" placeholder="Your Country"ng-required="true">
+     <p ng-show="userForm.country.$error.required && (userForm.country.$dirty || submitted)" class="help-block">Enter Country.</p>
+     </div>
+     
+     <!-- CITY -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.city.$invalid && (userForm.city.$dirty || submitted)}">
+     <label>City</label>
+     <input type="text" name="city" class="form-control" ng-model="city" placeholder="Your City" ng-minlength="3" ng-maxlength="8" ng-required="true">
+     <p ng-show="userForm.city.$error.required && (userForm.city.$dirty || submitted)" class="help-block">Enter city.</p>
+     </div>
+     
+     <!-- TERMS & CONDITIONS -->
+     <div class="form-group" ng-class="{ 'has-error' : userForm.terms.$invalid && (userForm.terms.$dirty || submitted)}">
+     <label>Accept Terms & Conditions</label>
+     <input type="checkbox" value="" name="terms" ng-model="user.terms" ng-required="true" />
+     <p ng-show="userForm.terms.$error.required && (userForm.terms.$dirty || submitted)" class="help-block">Accept terms & conditions.</p>
+     </div>
+     
+     <!-- ng-disabled FOR ENABLING AND DISABLING SUBMIT BUTTON -->
+     <!--<button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Register</button>-->
+     <button type="submit" class="btn btn-primary">Register</button>
+     </form>
+     </div>
+     </div>
+     <br />
+    </body>
+    </html>
