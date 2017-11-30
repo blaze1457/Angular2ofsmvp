@@ -13,6 +13,6 @@
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>
 		<property name="hbm2ddl.auto">create </property>
-		<mapping resource="com/jwt/hibernate/bean/user.hbm.xml" />
+		<mapping resource="com/ofs/matrimony/model/user.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

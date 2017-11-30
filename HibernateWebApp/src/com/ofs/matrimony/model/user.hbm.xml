@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.jwt.hibernate.bean.User" table="Matrimony_Profile_Info">
+	<class name="com.ofs.matrimony.model.User" table="Matrimony_Profile_Info">
 		<id column="User_Id" name="user_Id" type="java.lang.String" />
 		<property column="USER_NAME" name="userName" type="java.lang.String" />
 		<property column="PASSWORD" name="Password" type="string" />

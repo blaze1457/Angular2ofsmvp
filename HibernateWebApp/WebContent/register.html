@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+<meta charset="utf-8" />
 <title>Matrimony</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
@@ -9,7 +9,10 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+
 		//defining module
 		var myapp = angular.module('myapp', []);
 
@@ -43,13 +46,14 @@
 		});
 
 		// create angular controller
-		myapp.controller('mainController', function($scope) {
+		myapp.controller('mainController', function($scope, $http) {
 
 					$scope.mothlangList = ["Tamil", "English", "Hindi", "Urdu", "Kannada", "Telugu", "Malayalam", "Oriya", "Marathi", "Bengali", "Assamese", "Rajasthani", "Manipuri", "Others"];
 
 					$scope.castes = ["Any", "Caste-No-Bar", "gnikula-Kshatriya", "Arya Vysya", "Balija", "Besta", "Brahmin", "Chettiar", "Devanga", "Gandla", "Gapublic", "Gowda", "Intercaste", "Kalinga", "Kamma", "Kapu", "Kshatriya", "Kummari", "Kuruba", "Lingayath", "Mannuru Kapu", "Madiga", "Mahendra", "Mala", "Maratha", "Meru Darji", "Mudaliyar", "Mudiraj", "Nadar", "Nai", "Naidu", "Padmasali", "Patnaick", "Rajaka", "Rajput", "Reddy", "SC", "Telaga", "Tribe", "Uppara", "Vaddera", "Vaishnava", "Valmiki", "Vanjara", "Vokkaliga", "Velama", "Viswabrahmin", "Yadava", "Other"];
 
-
+					$scope.marstatus=["Unmarried","Widow-Widower","Divorce","Separated"];
+			
 					$scope.educationList = ["Any", "Bachelors-Engineering-Computers", "Masters-Engineering-Computers", "Bachelors-Arts-Science-Commerce-Others", "Masters-Arts-Science-Commerce-Others", "Management-BBA-MBA-Others", "Medicine-General-Dental-Surgeon-Others", "Legal-BL-ML-LLB-LLM-Others", "Service-IAS-IPS-Others", "Ph-Diploma", "Higher-Secondary-Secondary"];
 
 					$scope.religionList = ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Parsi", "Buddhist", "InterReligion", "NoReligion"];
@@ -58,28 +62,70 @@
 
 					$scope.residencyList = ["Citizen", "Permanent-Resident", "Work-Permit", "Student-Visa", "Temporary-Visa"];
 
-					// function to submit the form after all validation has occurred 
-					response.controller('responseControl', function($scope, $http) {
+		// function to submit the form after all validation has occurred 
+		//myapp.controller('responseControl', function($scope, $http) {
 
-						$scope.submitForm = function(user) {
+					$scope.submitForm = function(user) {
 
-							//GET request 
-							var url = "http://localhost:8080/HibernateWebApp/rest/user/add?user" = +user;
+						//GET request 
+						var url = "http://localhost:8080/HibernateWebApp/rest/user/add?user="+user;
 
-							$http.get(url).then(
-								function(payload) {
-									console.log(payload.data);
+						$http.get(url).then(
+							function(payload) {
+								console.log(payload.data);
 
-								});
+							});
 
+					}
+
+
+					$scope.redirectIndex = function() {
+						window.location = "login.html";
+					}
+					
+					$scope.fieldValues = {
+							dateOfBirth: ""
+						};
+
+						/*Date Of Birth*/
+						
+						$scope.days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+						$scope.months = [{id: 1, name:"January"},
+										 {id: 2, name:"February"},
+										 {id: 3, name:"March"},
+										 {id: 4, name:"April"},
+										 {id: 5, name:"May"},
+										 {id: 6, name:"June"},
+										 {id: 7, name:"July"},
+										 {id: 8, name:"August"},
+										 {id: 9, name:"September"},
+										 {id: 10, name:"October"},
+										 {id: 11, name:"November"},
+										 {id: 12, name:"December"}
+										];
+						$scope.years = [];
+						var d = new Date();
+						for (var i = (d.getFullYear() - 18); i > (d.getFullYear() - 100); i--) {
+							$scope.years.push(i);
 						}
-
-
-						$scope.redirectIndex = function() {
-							window.location = "login.html";
-						}
+						
+						$scope.year = "";
+						$scope.month = "";
+						$scope.day = "";
+						
+						$scope.updateDate = function (input){	
+							if (input == "year"){
+								$scope.month = "";
+								$scope.day = "";
+							}
+							else if (input == "month"){
+								$scope.day = "";
+							}
+							if ($scope.year && $scope.month && $scope.day){
+								$scope.fieldValues.dateOfBirth = new Date($scope.year, $scope.month.id - 1, $scope.day);
+							}
+						};
 					});
-
 	</script>
 </head>
 
@@ -129,13 +175,43 @@
 					ng-class="{ 'has-error' : userForm.user.gender.$invalid && (userForm.user.gender.$dirty || submitted)}">
 					<label id="label">Gender:</label>&nbsp;&nbsp;&nbsp;
 					Male&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"
-						name="user.gender" ng-model="user.gender" value="male" required>
+						name="user.gender" ng-model="user.gender" value="male" required />
 					&nbsp;&nbsp;&nbsp;&nbsp; Female <input type="radio"
-						name="user.gender" ng-model="user.gender" value="female" required></br>
+						name="user.gender" ng-model="user.gender" value="female" required /><br>
 					<span class="msg" ng-show="frm.user.gender.$error.required">select
 						any gender</span>
 				</div>
 
+				<!-- DATE OF BIRTH -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.user.Dob.$invalid && (userForm.user.Dob.$dirty || submitted)}">
+					<label>Date Of Birth</label> <select name="year" id="year"
+						ng-model="user.Dob.year" ng-options="y for y in years"
+						ng-change="updateDate('year')" required>
+						<option value='' disabled>Year</option>
+					</select> <select name="month" id="month" ng-model="user.Dob.month"
+						ng-options="m.name for m in months"
+						ng-change="updateDate('month')" required>
+						<option value='' disabled>Month</option>
+					</select> <select name="day" id="day" ng-model="user.Dob.day"
+						ng-options="d for d in days" ng-change="updateDate('day')"
+						onchange="changeMe(this)" required>
+						<option value='' disabled>Day</option>
+					</select>
+				</div>
+
+				<!-- PLACE OF BIRTH -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+					<label>Place of Birth</label> <input type="text" name="user.Pob"
+						class="form-control" ng-model="user.Pob"
+						placeholder="Your Place of Chennai" ng-required="true">
+					<p
+						ng-show="userForm.Pob.$error.required && (userForm.Pob.$dirty || submitted)"
+						class="help-block">Place of Birth is required.</p>
+				</div>
+
+				<!-- MOTHER LANGUAGE -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.user.motherlang.$invalid && (userForm.user.motherlang.$dirty || submitted)}">
 					<label>Mother Langugae</label> <select name="user.motherlang"
@@ -148,6 +224,7 @@
 						class="help-block">You Mother Language is required.</p>
 				</div>
 
+				<!-- CASTE -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.user.caste.$invalid && (userForm.user.caste.$dirty || submitted)}">
 					<label>Caste</label> <select name="user.caste" class="form-control"
@@ -158,6 +235,31 @@
 						class="help-block">You Caste is required.</p>
 				</div>
 
+				<!-- RELIGION -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+					<label>Religion</label> <select name="user.religion"
+						class="form-control" ng-model="user.religion"
+						ng-options="x for x in religionList" ng-required="true">
+						<option value=''>Select</option>
+					</select>
+					<p
+						ng-show="userForm.religion.$error.required && (userForm.religion.$dirty || submitted)"
+						class="help-block">Religion is required.</p>
+				</div>
+
+				<!-- MARTIAL STATUS -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
+					<label>Martial Status</label> <select name="user.status"
+						class="form-control" ng-model="user.status"
+						ng-options="x for x in marstatus" ng-required="true"></select>
+					<p
+						ng-show="userForm.status.$error.required && (userForm.status.$dirty || submitted)"
+						class="help-block">Status is Required</p>
+				</div>
+
+				<!-- EDUCATION -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
 					<label>Education</label> <select name="user.education"
@@ -170,6 +272,7 @@
 						class="help-block">Select Education.</p>
 				</div>
 
+				<!-- OCCUPATION -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
 					<label>Occupation</label> <input type="text" name="user.occupation"
@@ -180,6 +283,7 @@
 						class="help-block">Occupation is required.</p>
 				</div>
 
+				<!-- ANNUAL INCOME -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
 					<label>Annual Income</label> <input type="text"
@@ -191,6 +295,18 @@
 						class="help-block">Annual Income is required.</p>
 				</div>
 
+				<!-- CITY -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.city.$invalid && (userForm.city.$dirty || submitted)}">
+					<label>City</label> <input type="text" name="user.city"
+						class="form-control" ng-model="user.city" placeholder="Your City"
+						ng-minlength="3" ng-maxlength="8" ng-required="true">
+					<p
+						ng-show="userForm.city.$error.required && (userForm.city.$dirty || submitted)"
+						class="help-block">Enter city.</p>
+				</div>
+
+				<!-- STATE -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
 					<label>State</label> <input type="text" name="user.state"
@@ -201,27 +317,18 @@
 						class="help-block">State is required.</p>
 				</div>
 
+				<!-- COUNTRY -->
 				<div class="form-group"
-					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
-					<label>Status</label> <input type="text" name="user.status"
-						class="form-control" ng-model="user.status"
-						placeholder="Your status" ng-required="true">
+					ng-class="{ 'has-error' : userForm.country.$invalid && (userForm.country.$dirty || submitted)}">
+					<label>Country</label> <input type="text" name="user.country"
+						class="form-control" ng-model="user.country"
+						placeholder="Your Country" ng-required="true">
 					<p
-						ng-show="userForm.status.$error.required && (userForm.status.$dirty || submitted)"
-						class="help-block">Status is Required</p>
+						ng-show="userForm.country.$error.required && (userForm.country.$dirty || submitted)"
+						class="help-block">Enter Country.</p>
 				</div>
 
-				<div class="form-group"
-					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
-					<label>Religion</label> <select name="user.religion"
-						class="form-control" ng-model="user.religion"
-						ng-options="x for x in religionList" ng-required="true">
-						<option value=''>Select</option>
-						<p
-							ng-show="userForm.religion.$error.required && (userForm.religion.$dirty || submitted)"
-							class="help-block">Religion is required.</p>
-				</div>
-
+				<!-- RESIDENT STATUS -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
 					<label>Resident Status</label> <select name="user.residentstatus"
@@ -229,11 +336,13 @@
 						ng-options="residentstatus for residentstatus in residencyList"
 						ng-required="true">
 						<option value=''>Select</option>
-						<p
-							ng-show="userForm.residentstatus.$error.required && (userForm.residentstatus.$dirty || submitted)"
-							class="help-block">Resident Status is required.</p>
+					</select>
+					<p
+						ng-show="userForm.residentstatus.$error.required && (userForm.residentstatus.$dirty || submitted)"
+						class="help-block">Resident Status is required.</p>
 				</div>
 
+				<!-- CITIZENSHIP -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.name.$invalid && (userForm.name.$dirty || submitted)}">
 					<label>Citizenship</label> <input type="text"
@@ -252,9 +361,36 @@
 						ng-options="employement for employement in employementList"
 						ng-required="true">
 						<option value=''>Select</option>
-						<p
-							ng-show="userForm.employement.$error.required && (userForm.employement.$dirty || submitted)"
-							class="help-block">Employment is required.</p>
+					</select>
+					<p
+						ng-show="userForm.employement.$error.required && (userForm.employement.$dirty || submitted)"
+						class="help-block">Employment is required.</p>
+				</div>
+
+				<!-- CONTACTNO -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.contactno.$invalid && (userForm.contactno.$dirty || submitted) }">
+					<label>ContactNo</label> <input type="text" name="user.contactno"
+						class="form-control" ng-model="user.phoneno"
+						placeholder="Your Contact No" ng-pattern="/^[789]\d{9}$/"
+						maxlength="10">
+					<p
+						ng-show="userForm.contactno.$error.pattern && (userForm.contactno.$dirty || submitted)"
+						class="help-block">Enter a valid contactno.</p>
+				</div>
+
+				<!-- EMAIL -->
+				<div class="form-group"
+					ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$dirty || submitted)}">
+					<label>Email</label> <input type="email" name="user.email"
+						class="form-control" ng-model="user.emailid"
+						placeholder="Your Email Address" ng-required="true">
+					<p
+						ng-show="userForm.email.$error.required && (userForm.email.$dirty || submitted)"
+						class="help-block">Email is required.</p>
+					<p
+						ng-show="userForm.email.$error.email && (userForm.email.$dirty || submitted)"
+						class="help-block">Enter a valid email.</p>
 				</div>
 
 				<!-- PASSWORD -->
@@ -284,54 +420,6 @@
 						class="help-block">Confirm password doesnot match.</p>
 				</div>
 
-				<!-- EMAIL -->
-				<div class="form-group"
-					ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$dirty || submitted)}">
-					<label>Email</label> <input type="email" name="user.email"
-						class="form-control" ng-model="user.emailid"
-						placeholder="Your Email Address" ng-required="true">
-					<p
-						ng-show="userForm.email.$error.required && (userForm.email.$dirty || submitted)"
-						class="help-block">Email is required.</p>
-					<p
-						ng-show="userForm.email.$error.email && (userForm.email.$dirty || submitted)"
-						class="help-block">Enter a valid email.</p>
-				</div>
-
-				<!-- CONTACTNO -->
-				<div class="form-group"
-					ng-class="{ 'has-error' : userForm.contactno.$invalid && (userForm.contactno.$dirty || submitted) }">
-					<label>ContactNo</label> <input type="text" name="user.contactno"
-						class="form-control" ng-model="user.phoneno"
-						placeholder="Your Contact No" ng-pattern="/^[789]\d{9}$/"
-						maxlength="10">
-					<p
-						ng-show="userForm.contactno.$error.pattern && (userForm.contactno.$dirty || submitted)"
-						class="help-block">Enter a valid contactno.</p>
-				</div>
-
-				<!-- COUNTRY -->
-				<div class="form-group"
-					ng-class="{ 'has-error' : userForm.country.$invalid && (userForm.country.$dirty || submitted)}">
-					<label>Country</label> <input type="text" name="user.country"
-						class="form-control" ng-model="user.country"
-						placeholder="Your Country" ng-required="true">
-					<p
-						ng-show="userForm.country.$error.required && (userForm.country.$dirty || submitted)"
-						class="help-block">Enter Country.</p>
-				</div>
-
-				<!-- CITY -->
-				<div class="form-group"
-					ng-class="{ 'has-error' : userForm.city.$invalid && (userForm.city.$dirty || submitted)}">
-					<label>City</label> <input type="text" name="user.city"
-						class="form-control" ng-model="user.city" placeholder="Your City"
-						ng-minlength="3" ng-maxlength="8" ng-required="true">
-					<p
-						ng-show="userForm.city.$error.required && (userForm.city.$dirty || submitted)"
-						class="help-block">Enter city.</p>
-				</div>
-
 				<!-- TERMS & CONDITIONS -->
 				<div class="form-group"
 					ng-class="{ 'has-error' : userForm.terms.$invalid && (userForm.terms.$dirty || submitted)}">
@@ -345,10 +433,10 @@
 
 				<!-- ng-disabled FOR ENABLING AND DISABLING SUBMIT BUTTON -->
 				<!--<button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Register</button>-->
-				<button type="submit" class="btn btn-primary">Register</button>
+				<button type="submit" class="btn btn-primary"
+					ng-click="submitForm(user) ">Register</button>
 			</form>
 		</div>
 	</div>
-	<br />
 </body>
 </html>
